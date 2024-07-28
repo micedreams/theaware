@@ -13,7 +13,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         title: 'theaware',
-        theme: themeData(),
+        theme: getThemeData(),
         home: const Home(),
       );
 }
