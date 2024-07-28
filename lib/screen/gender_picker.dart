@@ -18,6 +18,9 @@ class GenderPicker extends StatelessWidget {
             (context, index) => InkWell(
               onTap: () => selectedGenderNotifier.value = Gender.values[index],
               child: Container(
+                // Note: this was not hugging so this is just what looked ok
+                padding: const EdgeInsets.symmetric(vertical: 7.0),
+                margin: const EdgeInsets.symmetric(vertical: 4.0),
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: gender == Gender.values[index]
@@ -35,18 +38,14 @@ class GenderPicker extends StatelessWidget {
                     AConstants.genderPickerBoxBorderRadius,
                   ),
                 ),
-                child: Padding(
-                  // Note: this was not hugging so this just looked ok
-                  padding: const EdgeInsets.symmetric(vertical: 7.0),
-                  child: Text(
-                    Gender.values[index].name
-                        .splitCamelCaseToString()
-                        .capitalize(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: AConstants.genderPickerFontSize,
-                      fontWeight: AConstants.genderPickerFontWeight,
-                    ),
+                child: Text(
+                  Gender.values[index].name
+                      .splitCamelCaseToString()
+                      .capitalize(),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: AConstants.genderPickerFontSize,
+                    fontWeight: AConstants.genderPickerFontWeight,
                   ),
                 ),
               ),
