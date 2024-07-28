@@ -1,7 +1,10 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+
 class AConstants {
   static const aTextFieldcursorColor = Color(0xFF5F97F6);
+  static const dividerColor = Color(0xff27AE60);
 
   static const inputDecorationThemeFillColor = Color(0xFFF2F2F5);
   static const inputDecorationThemeborderColor = Color(0xFFC7C9D9);

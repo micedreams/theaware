@@ -5,6 +5,7 @@ import 'a_constants.dart';
 ThemeData getThemeData() => ThemeData(
       colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff05A660)),
       useMaterial3: true,
+      dividerColor: AConstants.dividerColor,
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AConstants.inputDecorationThemeFillColor,

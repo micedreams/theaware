@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:theaware_screen/model/gender.dart';
-
-import '../../main.dart';
 import '../../model/country_and_states.dart';
-import '../widgets/a_text_field.dart';
+import '../../widgets/a_text_field.dart';
 
 class PlacePicker extends StatefulWidget {
   final TextEditingController stateController;
-
   final TextEditingController countryController;
+  final List<CountryAndStates> allCountries;
 
   const PlacePicker({
     super.key,
     required this.stateController,
     required this.countryController,
+    required this.allCountries,
   });
 
   @override
@@ -23,75 +21,75 @@ class PlacePicker extends StatefulWidget {
 class _PlacePickerState extends State<PlacePicker> {
   final filteredCountries = ValueNotifier(<CountryAndStates>[]);
   final filteredStates = ValueNotifier(<String>[]);
-  ValueNotifier<Gender?> selectedGenderNotifier = ValueNotifier(null);
 
   @override
   void initState() {
     super.initState();
-    widget.countryController.addListener(() => onFilterCountries(allCountries));
+    widget.countryController.addListener(onFilterCountries);
   }
 
   @override
-  Widget build(BuildContext context) => CustomScrollView(
-        slivers: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ATextField(
-              label: 'Country',
-              controller: widget.countryController,
+  void dispose() {
+    widget.countryController.removeListener(onFilterCountries);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ATextField(
+                label: 'Country',
+                controller: widget.countryController,
+              ),
             ),
-          ),
-          ValueListenableBuilder<List<CountryAndStates>>(
-            key: const Key('filteredCountries'),
-            valueListenable: filteredCountries,
-            builder: (context, value, _) => CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: value.length,
-                    (context, index) => ListTile(
-                      title: Text(value[index].country),
-                      onTap: () => onTapCountry(value[index]),
-                    ),
-                  ),
-                ),
-              ],
+            ValueListenableBuilder<List<CountryAndStates>>(
+              key: const Key('filteredCountries'),
+              valueListenable: filteredCountries,
+              builder: (context, value, _) {
+                if (value.isEmpty) return const SizedBox.shrink();
+
+                return ASliverList(
+                  childCount: value.length,
+                  buildLabel: (index) => value[index].country,
+                  onTap: (index) => onTapCountry(value[index]),
+                );
+              },
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ATextField(
-              label: 'State',
-              controller: widget.stateController,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ATextField(
+                label: 'State',
+                controller: widget.stateController,
+              ),
             ),
-          ),
-          ValueListenableBuilder<List<String>>(
-            key: const Key('filteredStates'),
-            valueListenable: filteredStates,
-            builder: (context, value, _) => CustomScrollView(
-              slivers: [
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: value.length,
-                    (context, index) => ListTile(
-                      title: Text(value[index]),
-                      onTap: () => onTapState(value[index]),
-                    ),
-                  ),
-                ),
-              ],
+            ValueListenableBuilder<List<String>>(
+              key: const Key('filteredStates'),
+              valueListenable: filteredStates,
+              builder: (context, value, _) {
+                if (value.isEmpty) return const SizedBox.shrink();
+
+                return ASliverList(
+                  childCount: value.length,
+                  buildLabel: (index) => value[index],
+                  onTap: (index) => onTapState(value[index]),
+                );
+              },
             ),
-          ),
-        ],
+          ],
+        ),
       );
 
-  void onFilterCountries(List<CountryAndStates> allCountries) {
-    final query = widget.countryController.text.toLowerCase();
-
+  void onFilterCountries() {
     widget.stateController.text = "";
     filteredStates.value = [];
 
-    filteredCountries.value = filterCountryAndStates(allCountries, query);
+    final query = widget.countryController.text.toLowerCase();
+
+    filteredCountries.value =
+        filterCountryAndStates(widget.allCountries, query);
   }
 
   void onTapCountry(CountryAndStates value) {
@@ -107,6 +105,40 @@ class _PlacePickerState extends State<PlacePicker> {
   void onTapState(String state) {
     widget.stateController.text = state;
 
-    filteredStates.value.clear();
+    filteredStates.value = [];
+  }
+}
+
+class ASliverList extends StatelessWidget {
+  const ASliverList({
+    super.key,
+    required this.childCount,
+    required this.buildLabel,
+    required this.onTap,
+  });
+  final int childCount;
+  final String Function(int) buildLabel;
+  final Function(int) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        decoration: const BoxDecoration(),
+        child: CustomScrollView(
+          slivers: [
+            SliverList.separated(
+              itemCount: childCount,
+              itemBuilder: (BuildContext context, int index) => ListTile(
+                title: Text(buildLabel(index)),
+                onTap: () => onTap(index),
+              ),
+              separatorBuilder: (BuildContext context, int index) =>
+                  const Divider(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

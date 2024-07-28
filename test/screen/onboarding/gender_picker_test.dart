@@ -5,7 +5,7 @@ import 'package:theaware_screen/model/gender.dart';
 import 'package:flutter/material.dart';
 import 'package:theaware_screen/screen/gender_picker.dart';
 
-import '../test_main.dart';
+import '../../test_main.dart';
 
 void main() {
   final selectedGenderNotifier = ValueNotifier<Gender?>(null);
