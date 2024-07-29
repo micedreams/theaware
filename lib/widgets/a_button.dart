@@ -42,6 +42,7 @@ class AButton extends StatelessWidget {
     required VoidCallback onTap,
   }) =>
       AButton(
+        key: const Key('primaryButton'),
         backGroundColor: const Color(0xff27AE60),
         label: label,
         labelColor: const Color(0xffffffff),
@@ -53,6 +54,7 @@ class AButton extends StatelessWidget {
     required VoidCallback onTap,
   }) =>
       AButton(
+        key: const Key('secondaryButton'),
         backGroundColor: const Color(0xffF2F2F5),
         label: label,
         labelColor: const Color(0xff3A3A3C),
@@ -60,6 +62,7 @@ class AButton extends StatelessWidget {
       );
 
   factory AButton.disabled({required String label}) => AButton(
+        key: const Key('disabledButton'),
         backGroundColor: const Color(0xffE3E3E3),
         label: label,
         labelColor: const Color(0xffffffff),
