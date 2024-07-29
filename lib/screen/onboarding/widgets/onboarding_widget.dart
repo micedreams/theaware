@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:theaware_screen/model/user.dart';
+import 'package:theaware_screen/screen/home.dart';
 
 import '../../../widgets/a_button.dart';
 import 'onboarding_progress_bar.dart';
@@ -11,6 +13,7 @@ class OnboardingWidget extends StatelessWidget {
     required this.subtitle,
     required this.child,
     this.onSkip,
+    this.user,
     this.showNext = true,
   });
 
@@ -20,6 +23,7 @@ class OnboardingWidget extends StatelessWidget {
   final Widget child;
   final VoidCallback? onSkip;
   final bool showNext;
+  final User? user;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -62,13 +66,14 @@ class OnboardingWidget extends StatelessWidget {
             child: Column(
               children: [
                 showNext
-                    ? AButton.primary(label: 'Next', onTap: goToNextPage)
+                    ? AButton.primary(
+                        label: 'Next', onTap: () => goToNextPage(context))
                     : AButton.disabled(label: 'Next'),
                 if (onSkip != null) const SizedBox(height: 4),
                 if (onSkip != null)
                   AButton.secondary(
                     label: 'Skip',
-                    onTap: onSkipPage,
+                    onTap: () => onSkipPage(context),
                   ),
               ],
             ),
@@ -76,15 +81,17 @@ class OnboardingWidget extends StatelessWidget {
         ],
       );
 
-  void onSkipPage() {
+  void onSkipPage(BuildContext context) {
     onSkip?.call();
-    goToNextPage();
+    goToNextPage(context);
   }
 
-  void goToNextPage() {
+  void goToNextPage(BuildContext context) {
     if (pageNotifier.value < 4) {
       final page = pageNotifier.value;
       pageNotifier.value = page + 1;
+    } else {
+      Navigator.pushNamed(context, '/Home', arguments: HomeConfig(user: user));
     }
   }
 

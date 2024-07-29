@@ -6,6 +6,7 @@ import 'package:theaware_screen/widgets/a_text_field.dart';
 
 import '../../helper/multi_value_listnable_builder.dart';
 import '../../model/gender.dart';
+import '../../model/user.dart';
 import 'widgets/onboarding_widget.dart';
 import 'widgets/place_picker.dart';
 
@@ -37,6 +38,8 @@ class _OnboardingState extends State<Onboarding> {
               nameController,
               dateController,
               genderNotifier,
+              stateController,
+              countryController,
             ],
                 builder: (context, _) {
                   switch (pageNotifier.value) {
@@ -95,14 +98,21 @@ class _OnboardingState extends State<Onboarding> {
                         title: 'Where are you from?',
                         subtitle:
                             "Setting the scene for your story. Which part of the world are you joining us from?",
-                        child: PlacePicker(
-                            stateController: stateController,
-                            countryController: countryController,
-                            allCountries: widget.allCountries),
                         onSkip: () {
                           stateController.clear();
                           countryController.clear();
                         },
+                        user: User(
+                          name: nameController.text,
+                          gender: genderNotifier.value,
+                          birthday: dateNotifier.value,
+                          country: countryController.text,
+                          state: stateController.text,
+                        ),
+                        child: PlacePicker(
+                            stateController: stateController,
+                            countryController: countryController,
+                            allCountries: widget.allCountries),
                       );
                     default:
                       return const SizedBox();
