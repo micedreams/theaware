@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'helper/generate_route.dart';
 import 'helper/read_from_file.dart';
 import 'helper/theme_data.dart';
 import 'model/country_and_states.dart';
-import 'screen/home.dart';
+import 'screen/login.dart';
 
 final allCountries = <CountryAndStates>[];
 
@@ -22,6 +23,9 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         title: 'theaware',
         theme: getThemeData(),
-        home: const Home(),
+        home: const Login(),
+        onGenerateRoute: onGenerateRoute,
+        initialRoute: '/',
       );
 }
+

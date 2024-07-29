@@ -27,6 +27,7 @@ class AButton extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
+            fontFamily: 'Mulish',
             fontSize: 18.0,
             color: labelColor,
             fontWeight: FontWeight.w600,
